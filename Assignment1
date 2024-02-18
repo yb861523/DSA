@@ -1,0 +1,133 @@
+ A Java program to implement a Stack data structure using the Linked list data structure.
+The required program needs to fulfill the following requirements
+Create a Node (Student) class to save the information (name and marks) of a student
+Create one or multiple stacks to save students data into the stack(s)
+Use a linked list data structure for the implementation of a stack.
+Take the choice of operation from the user and perform the following operations which depend
+on the choice
+1. To add a student to Stack
+2. To remove a Student from the Stack.
+3. Display all students of Stack.
+4. Display the top 3 positions of students. (The student with the highest marks is in first place positions  
+      are according to the same highest marks criteria)
+
+5. Press 5 or any other key to close the program
+Important Notes:
+The Stack must be implemented using a Linked list data structure Stack implementation math array will not be considered and will be awarded with Zero Marks Only classes are allowed to be used for student (Node) 
+You can use only stack to save the information of top students. Any other data structure, array, or variables are not allowe
+    }
+
+    public void push(String name, int marks) {
+        Student newNode = new Student(name, marks);
+        if (top == null) {
+            top = newNode;	zx 18-02-2024
+        } else {
+            newNode.next = top;
+            top = newNode;
+        }
+        System.out.println("Student added to the stack.");
+    }
+
+    public void pop() {
+        if (top == null) {
+            System.out.println("Stack is empty.");
+        } else {
+            System.out.println("Student removed from the stack: " + top.name);
+            top = top.next;
+        }
+    }
+
+    public void displayAll() {
+        if (top == null) {
+            System.out.println("Stack is empty.");
+        } else {
+            System.out.println("Students in the stack:");
+            Student current = top;
+            while (current != null) {
+                System.out.println("Name: " + current.name + ", Marks: " + current.marks);
+                current = current.next;
+            }
+        }
+    }
+
+    public void displayTop3() {
+        if (top == null) {
+            System.out.println("Stack is empty.");
+        } else {
+            System.out.println("Top 3 students:");
+            // Copy the top node to avoid modifying the original stack
+            Student tempTop = top;
+            Student[] topStudents = new Student[3];
+            // Initialize top students array with null
+            for (int i = 0; i < 3; i++) {
+                topStudents[i] = null;
+            }
+            while (tempTop != null) {
+                // Check if current student has higher marks than any of the top students
+                for (int i = 0; i < 3; i++) {
+                    if (topStudents[i] == null || tempTop.marks > topStudents[i].marks) {
+                        // Shift top students down if necessary
+                        for (int j = 2; j > i; j--) {
+                            topStudents[j] = topStudents[j - 1];
+                        }
+                        topStudents[i] = tempTop;
+                        break;
+                    }
+                }
+                tempTop = tempTop.next;
+            }
+            // Display top students
+            for (int i = 0; i < 3; i++) {
+                if (topStudents[i] != null) {
+                    System.out.println("Position " + (i + 1) + ": Name: " + topStudents[i].name + ", Marks: " + topStudents[i].marks);
+                }
+            }
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Stack stack = new Stack();
+
+        int choice;
+        do {
+            System.out.println("\nChoose an operation:");
+            System.out.println("1. Add a student to the stack");
+            System.out.println("2. Remove a student from the stack");
+            System.out.println("3. Display all students in the stack");
+            System.out.println("4. Display the top 3 positions of students");
+            System.out.println("5. Exit");
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter student name: ");
+                    scanner.nextLine(); // Consume newline character
+                    String name = scanner.nextLine();
+                    System.out.print("Enter marks: ");
+                    int marks = scanner.nextInt();
+                    stack.push(name, marks);
+                    break;
+                case 2:
+                    stack.pop();
+                    break;
+                case 3:
+                    stack.displayAll();
+                    break;
+                case 4:
+                    stack.displayTop3();
+                    break;
+                case 5:
+                    System.out.println("Exiting program.");
+                    break;
+                default:
+                    System.out.println("Invalid choice.");
+            }
+        } while (choice != 5);
+
+        scanner.close();
+    }
+}
